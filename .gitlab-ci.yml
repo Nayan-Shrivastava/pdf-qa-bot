@@ -1,0 +1,13 @@
+stages:
+  - notify
+
+notify_slack:
+  stage: notify
+  tags:
+    - self-hosted
+  image: curlimages/curl:latest 
+  variables:
+    SLACK_WEBHOOK_URL: "$SLACK_WEBHOOK_SECRET"
+  script:
+    - echo "${SLACK_WEBHOOK_SECRET}"
+    - 'curl -X POST -H "Content-type: application/json" --data "{\"channel\":\"${SLACK_CHANNEL}\", \"text\":\"A new commit occurred on the repository : ${CI_REPOSITORY_URL} by ${CI_COMMIT_AUTHOR}. and commit message is ${CI_COMMIT_MESSAGE}\"}" "${SLACK_WEBHOOK_SECRET}" '
